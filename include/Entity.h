@@ -1,5 +1,6 @@
 #pragma once
+#include <vector>
+#include "Component.h"
 #include <stdint.h>
-using Entity = std::uint32_t;
-
-const Entity MAX_ENTITIES = 2000;
+using Entity = std::uint64_t;
+const Entity MAX_ENTITIES = 4000;

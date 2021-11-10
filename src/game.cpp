@@ -1,5 +1,5 @@
 #include <game.h>
-
+Coordinator coordinator;
 Game::Game()
 {
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -18,6 +18,25 @@ Game::Game()
         if(window == nullptr)
         {
             std::cout << "Failed to create window. Error: " << SDL_GetError();
+        }
+         coordinator.init();
+        coordinator.registerComponent<RenderComponent>();
+        coordinator.registerComponent<PositionComponent>();
+        renderSystem = coordinator.registerSystem<RenderSystem>();
+        Signature signature;
+        signature.set(coordinator.getComponentType<RenderComponent>());
+        signature.set(coordinator.getComponentType<PositionComponent>());
+        coordinator.setSystemSignature<RenderSystem>(signature);
+
+        for(auto& entity : entities)
+        {
+            entity = coordinator.addEntity();
+            RenderComponent renderComponent;
+            renderComponent.h = 20;
+            renderComponent.w = 20;
+            renderComponent.rectangle = SDL_Rect{10,10,renderComponent.w, renderComponent.h};
+            coordinator.addComponent(entity, renderComponent);
+            coordinator.addComponent(entity, PositionComponent{.x=10, .y=10});
         }
     }
 }

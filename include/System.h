@@ -4,10 +4,12 @@
 #include "Entity.h"
 #include "Component.h"
 #include <set>
-
+#include "Coordinator.h"
+extern Coordinator coordinator;
 class System
 {
 public:
+    System() = default;
     std::set<Entity> entities;
 };
 
@@ -27,9 +29,10 @@ private:
 public:
     void render(SDL_Renderer* renderer)
     {
-        for(auto& entity : entities)
+        for(auto const& entity : entities)
         {
-           
+            auto& position = coordinator.getComponent<PositionComponent>(entity);
+            auto& renderable = coordinator.getComponent<RenderComponent>(entity);
         }
     }
 };

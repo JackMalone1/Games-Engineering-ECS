@@ -2,31 +2,15 @@
 #include <algorithm>
 #include <vector>
 #include "Entity.h"
+#include "Coordinator.h"
+#include "Component.h"
+#include <set>
 
+extern Coordinator m_Coordinator;
 class System
 {
-private:
-    std::vector<Entity> m_entities;
 public:
-    void addEntity(Entity entity)
-    {
-        m_entities.push_back(entity);
-    }
-    void update();
-    void removeEntity(Entity entity)
-    {
-        std::vector<Entity>::iterator it = m_entities.begin();
-        std::vector<Entity>::iterator end = m_entities.end();
-        for(; it != end; it++)
-        {
-            if(*it == entity)
-            {
-                m_entities.erase(it);
-                return;
-            }
-        }
-    }
-    std::vector<Entity> getEntities();
+    std::set<Entity> entities;
 };
 
 
@@ -43,7 +27,17 @@ class RenderSystem : public System
 private:
 
 public:
-
+    void render(SDL_Renderer* renderer)
+    {
+        for(auto& entity : entities)
+        {
+            RenderComponent& renderComponent = m_Coordinator.GetComponent<RenderComponent>(entity);
+            PositionComponent& positionComponent = m_Coordinator.GetComponent<PositionComponent>(entity);
+            renderComponent.rectangle.x = positionComponent.x;
+            renderComponent.rectangle.y = positionComponent.y;
+            SDL_RenderDrawRect(renderer, &renderComponent.rectangle);
+        }
+    }
 };
 
 class AISystem : public System

@@ -50,5 +50,6 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "sdl.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

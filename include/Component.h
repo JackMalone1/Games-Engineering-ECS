@@ -1,16 +1,27 @@
 #pragma once
+#include <stdint.h>
+#include <SDL2/SDL.h>
+using ComponentType = std::uint8_t;
 
-struct Component
+const ComponentType MAX_COMPONENTS = 32;
+
+struct HealthComponent
 {
-
+    int health;
 };
 
-struct HealthComponent : Component
-{
-
-};
-
-struct PositionComponent : Component
+struct PositionComponent
 {
     float x, y;
+};
+
+struct InputComponent
+{
+    SDL_Event event;
+};
+
+struct RenderComponent
+{
+    SDL_Rect rectangle;
+    float w,h;
 };

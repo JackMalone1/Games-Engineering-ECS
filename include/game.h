@@ -7,7 +7,8 @@
 #include <iostream>
 
 #include <map>
-#include "Factory.h"
+#include "System.h"
+#include <vector>
 
 class Game
 {
@@ -27,5 +28,6 @@ private:
     SDL_Renderer* renderer = nullptr;
     TTF_Font* m_font = nullptr;
     SDL_Event e;
+    RenderSystem renderSystem;
     bool running = true;
 };

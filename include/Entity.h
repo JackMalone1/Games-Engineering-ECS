@@ -3,4 +3,4 @@
 #include "Component.h"
 #include <stdint.h>
 using Entity = std::uint64_t;
-const Entity MAX_ENTITIES = 4000;
+const Entity MAX_ENTITIES = 5000;

@@ -10,6 +10,7 @@
 #include "System.h"
 #include <vector>
 #include "Coordinator.h"
+#include "RenderSystem.h"
 class Game
 {
 public:

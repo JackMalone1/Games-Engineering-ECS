@@ -15,13 +15,9 @@ public:
     void registerComponent()
     {
         const char* typeName = typeid(T).name();
-
-        if(componentTypes.find(typeName) == componentTypes.end()) throw "cannot find component type \n";
-
         componentTypes.insert({typeName, nextComponentType});
         componentArrays.insert({typeName, std::make_shared<ComponentArray<T>>()});
-
-        nextComponentType++;
+        ++nextComponentType;
     }
 
     template<typename T>

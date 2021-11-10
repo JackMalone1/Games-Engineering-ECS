@@ -9,7 +9,7 @@ class EntityManager
 public:
     EntityManager()
     {
-        for(Entity entity; entity < MAX_ENTITIES; entity++)
+        for(Entity entity = 0; entity < MAX_ENTITIES; ++entity)
         {
             entities.push(entity);
         }
@@ -21,7 +21,7 @@ public:
 
         Entity entity = entities.front();
         entities.pop();
-        numberOfEntities++;
+        ++numberOfEntities;
         return entity;
     }
 
@@ -31,7 +31,7 @@ public:
 
         signatures.at(entity).reset();
         entities.push(entity);
-        numberOfEntities--;
+        --numberOfEntities;
     }
 
     void setSignature(Entity entity, Signature signature)
@@ -44,9 +44,10 @@ public:
     Signature getSignature(Entity entity)
     {
         if(entity >= MAX_ENTITIES) throw std::exception();
+        return signatures[entity];
     }
 private:
-    std::queue<Entity> entities;
-    std::array<Signature, MAX_ENTITIES> signatures;
-    uint32_t numberOfEntities;
+    std::queue<Entity> entities{};
+    std::array<Signature, MAX_ENTITIES> signatures{};
+    uint32_t numberOfEntities{};
 };

@@ -19,7 +19,7 @@ Game::Game()
         {
             std::cout << "Failed to create window. Error: " << SDL_GetError();
         }
-         coordinator.init();
+        coordinator.init();
         coordinator.registerComponent<RenderComponent>();
         coordinator.registerComponent<PositionComponent>();
         renderSystem = coordinator.registerSystem<RenderSystem>();
@@ -35,8 +35,9 @@ Game::Game()
             renderComponent.h = 20;
             renderComponent.w = 20;
             renderComponent.rectangle = SDL_Rect{10,10,renderComponent.w, renderComponent.h};
-            coordinator.addComponent(entity, renderComponent);
+            
             coordinator.addComponent(entity, PositionComponent{.x=10, .y=10});
+            coordinator.addComponent(entity, RenderComponent{.rectangle{10,10,20,20},.w=20,.h=20,.colour=SDL_Color{.r=0,.g=255,.b=0,.a=255}});
         }
     }
 }
@@ -77,6 +78,7 @@ void Game::render()
 {
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 255,255,255,255);
+    renderSystem->render(renderer);
     SDL_RenderPresent(renderer);
 }
 

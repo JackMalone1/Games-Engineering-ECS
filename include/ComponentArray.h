@@ -18,13 +18,11 @@ class ComponentArray : public IComponentArray
 public:
     void addComponent(Entity entity, T component)
     {
-        if(entityToIndex.find(entity) != entityToIndex.end()) throw "component is on entity already";
-
-        size_t index = size;
-        entityToIndex.at(entity) = index;
-        indexToEntity.at(index) = entity;
-        componentArray.at(index) = component;
-        size++;
+        size_t newIndex = size;
+        entityToIndex[entity] = newIndex;
+        indexToEntity[newIndex] = entity;
+        componentArray[newIndex] = component;
+        ++size;
     }
 
     void removeComponent(Entity entity)

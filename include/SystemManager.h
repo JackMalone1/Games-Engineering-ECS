@@ -31,9 +31,9 @@ public:
 
     void entityDestroyed(Entity entity)
     {
-        for(auto const& it = systems.begin(); it != systems.end(); ++it)
+        for (auto const& pair : systems)
         {
-            auto const& system = it->second;
+            auto const& system = pair.second;
 
             system->entities.erase(entity);
         }
@@ -41,13 +41,13 @@ public:
 
     void entitySignatureChanged(Entity entity, Signature entitySignature)
     {
-        for(auto const& it = systems.begin(); it != systems.end(); ++it)
+        for (auto const& pair : systems)
         {
-            auto const& type = it->first;
-            auto const& system = it->second;
+            auto const& type = pair.first;
+            auto const& system = pair.second;
             auto const& systemSignature = signatures[type];
 
-            if((entitySignature & systemSignature) == systemSignature)
+            if ((entitySignature & systemSignature) == systemSignature)
             {
                 system->entities.insert(entity);
             }

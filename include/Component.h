@@ -24,4 +24,5 @@ struct RenderComponent
 {
     SDL_Rect rectangle;
     float w,h;
+    SDL_Color colour;
 };

@@ -11,6 +11,7 @@
 #include <vector>
 #include "Coordinator.h"
 #include "RenderSystem.h"
+#include "ControlSystem.h"
 class Game
 {
 public:
@@ -31,5 +32,6 @@ private:
     SDL_Event e;
     std::vector<Entity> entities{1};
     std::shared_ptr<RenderSystem> renderSystem;
+    std::shared_ptr<ControlSystem> controlSystem;
     bool running = true;
 };

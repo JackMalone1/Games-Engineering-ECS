@@ -22,12 +22,17 @@ Game::Game()
         coordinator.init();
         coordinator.registerComponent<RenderComponent>();
         coordinator.registerComponent<PositionComponent>();
+        coordinator.registerComponent<InputComponent>();
         renderSystem = coordinator.registerSystem<RenderSystem>();
+        controlSystem = coordinator.registerSystem<ControlSystem>();
         Signature signature;
         signature.set(coordinator.getComponentType<RenderComponent>());
         signature.set(coordinator.getComponentType<PositionComponent>());
         coordinator.setSystemSignature<RenderSystem>(signature);
-
+        Signature inputSignature;
+        inputSignature.set(coordinator.getComponentType<PositionComponent>());
+        inputSignature.set(coordinator.getComponentType<InputComponent>());
+        coordinator.setSystemSignature<ControlSystem>(inputSignature);
         for(auto& entity : entities)
         {
             entity = coordinator.addEntity();
@@ -38,6 +43,7 @@ Game::Game()
             
             coordinator.addComponent(entity, PositionComponent{.x=10, .y=10});
             coordinator.addComponent(entity, RenderComponent{.rectangle{10,10,20,20},.w=20,.h=20,.colour=SDL_Color{.r=0,.g=255,.b=0,.a=255}});
+            coordinator.addComponent(entity, InputComponent{});
         }
     }
 }
@@ -61,7 +67,7 @@ void Game::handleEvents()
 {
     while(SDL_PollEvent(&e) != 0)
     {
-        
+        controlSystem->processEvents(e);
         if(e.type == SDL_QUIT)
         {
             running = false;

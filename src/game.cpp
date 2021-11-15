@@ -2,6 +2,7 @@
 Coordinator coordinator;
 Game::Game()
 {
+    srand(time(NULL));
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
         std::cout << "SDL could not be initialised. Error: " << SDL_GetError();
@@ -23,8 +24,12 @@ Game::Game()
         coordinator.registerComponent<RenderComponent>();
         coordinator.registerComponent<PositionComponent>();
         coordinator.registerComponent<InputComponent>();
+        coordinator.registerComponent<HealthComponent>();
+        coordinator.registerComponent<AIComponent>();
         renderSystem = coordinator.registerSystem<RenderSystem>();
         controlSystem = coordinator.registerSystem<ControlSystem>();
+        aiSystem = coordinator.registerSystem<AISystem>();
+        healthSystem = coordinator.registerSystem<HealthSystem>();
         Signature signature;
         signature.set(coordinator.getComponentType<RenderComponent>());
         signature.set(coordinator.getComponentType<PositionComponent>());
@@ -33,8 +38,17 @@ Game::Game()
         inputSignature.set(coordinator.getComponentType<PositionComponent>());
         inputSignature.set(coordinator.getComponentType<InputComponent>());
         coordinator.setSystemSignature<ControlSystem>(inputSignature);
-        for(auto& entity : entities)
+        Signature healthSignature;
+        healthSignature.set(coordinator.getComponentType<HealthComponent>());
+        coordinator.setSystemSignature<HealthSystem>(healthSignature);
+        Signature aiSignature;
+        aiSignature.set(coordinator.getComponentType<PositionComponent>());
+        aiSignature.set(coordinator.getComponentType<AIComponent>());
+        coordinator.setSystemSignature<AISystem>(aiSignature);
+        entities.resize(4);
+        for(int i = 0; i < 4; i++)
         {
+            Entity& entity = entities.at(i);
             entity = coordinator.addEntity();
             RenderComponent renderComponent;
             renderComponent.h = 20;
@@ -43,8 +57,17 @@ Game::Game()
             
             coordinator.addComponent(entity, PositionComponent{.x=10, .y=10});
             coordinator.addComponent(entity, RenderComponent{.rectangle{10,10,20,20},.w=20,.h=20,.colour=SDL_Color{.r=0,.g=255,.b=0,.a=255}});
-            coordinator.addComponent(entity, InputComponent{});
+            if(i != 3) coordinator.addComponent(entity, HealthComponent{.health=rand()%5+1});
+            if(i == 0)
+            {
+                coordinator.addComponent(entity, InputComponent{});
+            }
+            else
+            {
+                coordinator.addComponent(entity, AIComponent{});
+            }            
         }
+        std::cout << "Entities: " << entities.size() << std::endl;
     }
 }
 
@@ -77,7 +100,8 @@ void Game::handleEvents()
 
 void Game::update()
 {
-    
+    aiSystem->move();
+    healthSystem->displayHealth();
 }
 
 void Game::render()

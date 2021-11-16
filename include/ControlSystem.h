@@ -7,7 +7,26 @@ extern Coordinator coordinator;
 class ControlSystem : public System
 {
 private:
+    void processBoundaries(PositionComponent& position)
+    {
+        if(position.x > 1200)
+        {
+            position.x = 0;
+        }
+        else if(position.x < 0)
+        {
+            position.x = 1200;
+        }
 
+        if(position.y > 900)
+        {
+            position.y = 0;
+        }
+        else if(position.y < 0)
+        {
+            position.y = 900;
+        }
+    }
 public:
     void processEvents(SDL_Event& event)
     {
@@ -37,6 +56,8 @@ public:
                     position.y += 3;
                 }
             }
+
+            processBoundaries(position);
         }      
     }
 };

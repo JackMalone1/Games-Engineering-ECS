@@ -29,21 +29,29 @@ private:
             position.y = 900;
         }
     }
+
+    bool areColliding(SDL_Rect a, SDL_Rect b)
+    {
+        return a.x < (b.x + b.w) && (a.x + a.w) > b.x &&
+               a.y > (b.y + b.h) && (a.y + a.h) < b.y;
+    }
 public:
-    void move()
+    void move(Entity* targetEntity)
     {
         for(auto& entity : entities)
         {
             auto& position = coordinator.getComponent<PositionComponent>(entity);
             auto& ai = coordinator.getComponent<AIComponent>(entity);
+            auto& render = coordinator.getComponent<RenderComponent>(entity);
+            auto& targetRender = coordinator.getComponent<RenderComponent>(*targetEntity);
+            auto& health = coordinator.getComponent<HealthComponent>(entity);
             position.x += ai.xVelocity;
             position.y += ai.yVelocity;
             processBoundaries(position);
+            if(areColliding(targetRender.rectangle, render.rectangle))
+            {
+                health.health -= 1;
+            }
         }     
-    }
-
-    AISystem()
-    {
-        
     }
 };

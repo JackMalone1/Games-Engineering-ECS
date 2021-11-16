@@ -44,31 +44,82 @@ Game::Game()
         Signature aiSignature;
         aiSignature.set(coordinator.getComponentType<PositionComponent>());
         aiSignature.set(coordinator.getComponentType<AIComponent>());
+        aiSignature.set(coordinator.getComponentType<HealthComponent>());
+        aiSignature.set(coordinator.getComponentType<RenderComponent>());
         coordinator.setSystemSignature<AISystem>(aiSignature);
         entities.resize(4);
-        for(int i = 0; i < 4; i++)
-        {
-            Entity& entity = entities.at(i);
-            entity = coordinator.addEntity();
-            RenderComponent renderComponent;
-            renderComponent.h = 20;
-            renderComponent.w = 20;
-            renderComponent.rectangle = SDL_Rect{10,10,renderComponent.w, renderComponent.h};
-            
-            coordinator.addComponent(entity, PositionComponent{.x=10, .y=10});
-            coordinator.addComponent(entity, RenderComponent{.rectangle{10,10,20,20},.w=20,.h=20,.colour=SDL_Color{.r=0,.g=255,.b=0,.a=255}});
-            if(i != 3) coordinator.addComponent(entity, HealthComponent{.health=rand()%5+1});
-            if(i == 0)
-            {
-                coordinator.addComponent(entity, InputComponent{});
-            }
-            else
-            {
-                coordinator.addComponent(entity, AIComponent{});
-            }            
-        }
-        std::cout << "Entities: " << entities.size() << std::endl;
+        setUpPlayer();
+        setUpCortana();
+        setUpDinkyDi();
+        setUpVillain();
     }
+}
+
+void Game::setUpPlayer()
+{
+    Entity& entity = entities.at(0);
+    entity = coordinator.addEntity();
+    RenderComponent renderComponent;
+    renderComponent.rectangle.h = 20;
+    renderComponent.rectangle.w = 20;
+    renderComponent.colour = SDL_Color{.r=0,.g=255,.b=0,.a=255};
+    PositionComponent positionComponent{.x=10,.y=10};
+    renderComponent.rectangle.x = positionComponent.x;
+    renderComponent.rectangle.y = positionComponent.y;
+    coordinator.addComponent(entity, positionComponent);
+    coordinator.addComponent(entity, renderComponent);
+    coordinator.addComponent(entity, HealthComponent{.health=30, .entityTag="Player"});
+    coordinator.addComponent(entity, InputComponent{});
+}
+
+void Game::setUpCortana()
+{
+    Entity& entity = entities.at(1);
+    entity = coordinator.addEntity();
+    RenderComponent renderComponent;
+    renderComponent.rectangle.h = 20;
+    renderComponent.rectangle.w = 20;
+    renderComponent.colour = SDL_Color{.r=0,.g=0,.b=255,.a=255};
+    PositionComponent positionComponent{.x=50,.y=50};
+    renderComponent.rectangle.x = positionComponent.x;
+    renderComponent.rectangle.y = positionComponent.y;
+    coordinator.addComponent(entity, positionComponent);
+    coordinator.addComponent(entity, renderComponent);
+    coordinator.addComponent(entity, HealthComponent{.health=5, .entityTag="Cortana"});
+    coordinator.addComponent(entity, AIComponent{});
+}
+
+void Game::setUpVillain()
+{
+    Entity& entity = entities.at(2);
+    entity = coordinator.addEntity();
+    RenderComponent renderComponent;
+    renderComponent.rectangle.h = 20;
+    renderComponent.rectangle.w = 20;
+    renderComponent.colour = SDL_Color{.r=0,.g=0,.b=255,.a=255};
+    PositionComponent positionComponent{.x=150,.y=200};
+    renderComponent.rectangle.x = positionComponent.x;
+    renderComponent.rectangle.y = positionComponent.y;
+    coordinator.addComponent(entity, positionComponent);
+    coordinator.addComponent(entity, renderComponent);
+    coordinator.addComponent(entity, HealthComponent{.health=5, .entityTag="Villain"});
+    coordinator.addComponent(entity, AIComponent{});
+}
+
+void Game::setUpDinkyDi()
+{
+    Entity& entity = entities.at(3);
+    entity = coordinator.addEntity();
+    RenderComponent renderComponent;
+    renderComponent.rectangle.h = 20;
+    renderComponent.rectangle.w = 20;
+    renderComponent.colour = SDL_Color{.r=200,.g=0,.b=0,.a=255};
+    PositionComponent positionComponent{.x=50,.y=200};
+    renderComponent.rectangle.x = positionComponent.x;
+    renderComponent.rectangle.y = positionComponent.y;
+    coordinator.addComponent(entity, positionComponent);
+    coordinator.addComponent(entity, renderComponent);
+    coordinator.addComponent(entity, AIComponent{});
 }
 
 bool Game::isRunning()
@@ -100,7 +151,7 @@ void Game::handleEvents()
 
 void Game::update()
 {
-    aiSystem->move();
+    aiSystem->move(&entities.at(0));
     healthSystem->displayHealth();
 }
 

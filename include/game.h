@@ -40,5 +40,10 @@ private:
     std::shared_ptr<ControlSystem> controlSystem;
     std::shared_ptr<AISystem> aiSystem;
     std::shared_ptr<HealthSystem> healthSystem;
+
+    void setUpPlayer();
+    void setUpVillain();
+    void setUpCortana();
+    void setUpDinkyDi();
     bool running = true;
 };

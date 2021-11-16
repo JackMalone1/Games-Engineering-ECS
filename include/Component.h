@@ -9,6 +9,7 @@ const ComponentType MAX_COMPONENTS = 32;
 struct HealthComponent
 {
     int health;
+    std::string entityTag;
 };
 
 struct PositionComponent

@@ -18,7 +18,7 @@ public:
             renderable.rectangle.x = position.x;
             renderable.rectangle.y = position.y;
             SDL_SetRenderDrawColor(renderer, renderable.colour.r,renderable.colour.g,renderable.colour.b,renderable.colour.a);
-            SDL_RenderDrawRect(renderer, &renderable.rectangle);
+            SDL_RenderFillRect(renderer, &renderable.rectangle);
             SDL_SetRenderDrawColor(renderer, 255,255,255,255);
         }
     }
